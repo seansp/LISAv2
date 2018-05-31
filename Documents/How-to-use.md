@@ -2,7 +2,7 @@
 
 ## Objective
 
-This document provides instructions for partners to create their own customized menu for the Jenkins pipeline and to run Microsoft-provided tests and/or customized test cases in Jenkins. This instruction has 2 major parts; creating the menu from xml files and executing the tests. Creating a custom menu may be optional for your test development. If you keep the same menu structure and add new tests into existing the menu, you will only update the existing XML files in **./XML/TestCases/**
+This document provides instructions for partners to create their own customized menu for the Jenkins pipeline and to run Microsoft-provided tests and/or customized test cases in Jenkins. This instruction has 2 major parts; creating the menu from xml files and executing the tests. Creating a custom menu may be optional for your test development. If you keep the same menu structure and add new tests into the existing menu, you will only update the existing XML files in **./XML/TestCases/**
 
 If you add a custom test menu, you will need to re-build the Jenkins menu, and then can run new tests.
 
