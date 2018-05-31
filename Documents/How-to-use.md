@@ -34,7 +34,7 @@ If you add a custom test menu, you will need to re-build the Jenkins menu, and t
 
 ## Verify a published image on Azure
 
-`UI I Instructions`
+`Web Browser Instructions`
 
         1. Sign into Jenkins page with the assigned username & password
         2. Browse to '<Partner name>-Refresh-Test-Selection-Menu', if you would like to apply new menu or test cases 
@@ -64,10 +64,10 @@ A single script executes the test launch/execute with pre-defined parameters. It
 
     $./LaunchTestPipelineRemotely.sh -ParametersFile "<parameter definition file>"
 
-`‘Script name and its parameters’`
-example
+`‘Script name with populated parameters’`
+ 
 
-    $./LaunchTestPipelineRemotely.sh -JenkinsUser "microsoft" -ApiToken "123451234512345dlkwekl2kfo" -FtpUsername "ftpuser" -FtpPassword "ftppassword! [-ImageSource "linux-next_1.2" | -CustomVHD "/path/to/local/vhd/vhdx/vhd.xz" | -CustomVHDURL "http://downloadable/link/to/your/file.vhd/vhdx/vhd.xz"] -Kernel "default" -GitUrlForAutomation "https://github.com/LIS/LISAv2.git" -GitBranchForAutomation "master" -TestByTestname "Azure>>VERIFY-DEPLOYMENT-PROVISION>>eastasia,Azure>>VERIFY-HOSTNAME>>westeurope" -TestByCategorisedTestname "Azure>>Smoke>>default>>VERIFY-DEPLOYMENT-PROVISION>>northeurope,Azure>>Functional>>SRIOV>>VERIFY-SRIOV-LSPCI>>southcentralus" -TestByCategory "Azure>>Functional>>SRIOV>>eastus,Azure>>Community>>LTP>>westeurope" -TestByTag "Azure>>boot>>northcentralus,Azure>>wala>>westeurope,Azure>>gpu>>eastus" -Email "lisasupport@microsoft.com" -TestPipeline "Microsoft-Test-Execution-Pipeline" -LinuxUsername "linuxuser" -LinuxPassword "linuxpassword?"
+    $./LaunchTestPipelineRemotely.sh -JenkinsUser "microsoft" -ApiToken "123451234512345dlkwekl2kfo" -FtpUsername "ftpuser" -FtpPassword "ftppassword!" [-ImageSource "linux-next_1.2" | -CustomVHD "/path/to/local/vhd/vhdx/vhd.xz" | -CustomVHDURL "http://downloadable/link/to/your/file.vhd/vhdx/vhd.xz"] -Kernel "default" -GitUrlForAutomation "https://github.com/LIS/LISAv2.git" -GitBranchForAutomation "master" -TestByTestname "Azure>>VERIFY-DEPLOYMENT-PROVISION>>eastasia,Azure>>VERIFY-HOSTNAME>>westeurope" -TestByCategorisedTestname "Azure>>Smoke>>default>>VERIFY-DEPLOYMENT-PROVISION>>northeurope,Azure>>Functional>>SRIOV>>VERIFY-SRIOV-LSPCI>>southcentralus" -TestByCategory "Azure>>Functional>>SRIOV>>eastus,Azure>>Community>>LTP>>westeurope" -TestByTag "Azure>>boot>>northcentralus,Azure>>wala>>westeurope,Azure>>gpu>>eastus" -Email "lisasupport@microsoft.com" -TestPipeline "Microsoft-Test-Execution-Pipeline" -LinuxUsername "linuxuser" -LinuxPassword "linuxpassword?"
 
     $./LaunchTestPipelineRemotely.sh -ParametersFile "TestParameters.sh"
 
@@ -95,18 +95,18 @@ This location has the list of XML files for test cases. Each XML file names afte
     7. SmokeTests.xml: It will run before BVT test runs.
     8. StressTests.xml: Under development. Network traffic and stroage IO testing under heavy CPU and Memory stress.
 
-    Here is the format inside of TestCases.xml file. TODO: Revise the definition, and required field or not.
-    [Req] Required
-    [Opt] Optional
-        <testName></testName>: Represent unique Test Case name [Req]
-        <testScript></testScript>: test script file name [Opt]
-        <PowershellScript></PowershellScript>: Actual launch PS script file name. [Req]
-        <files></files>: If test requires data files, add the file names here [Opt]
-        <setupType></setupType>: The name represents VM definition in <Category name>TestsConfigurations xml file, VMConfigurations folder. [Req]
-        <Platform></Platform>: Supported platform names. Azure, HyperV, etc. [Req]
-        <Category></Category>: Available Test Category [Req]
-        <Area></Area>: Test Area [Req]
-        <Tags></Tags>: Tag information seperated by comma [Opt]
+Here is the format inside of TestCases.xml file. TODO: Revise the definition, and required field or not.
+[Req] Required
+[Opt] Optional
+**<testName></testName>**: Represent unique Test Case name [Req]
+**<testScript></testScript>**: test script file name [Opt]
+    <PowershellScript></PowershellScript>: Actual launch PS script file name. [Req]
+    <files></files>: If test requires data files, add the file names here [Opt]
+    <setupType></setupType>: The name represents VM definition in <Category name>TestsConfigurations xml file, VMConfigurations folder. [Req]
+    <Platform></Platform>: Supported platform names. Azure, HyperV, etc. [Req]
+    <Category></Category>: Available Test Category [Req]
+    <Area></Area>: Test Area [Req]
+    <Tags></Tags>: Tag information seperated by comma [Opt]
 
 ## TestsConfigurations.xml in XML/VMConfigurations
 
