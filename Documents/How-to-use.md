@@ -21,9 +21,8 @@
             i. Sync up the local 'master' branch from remote 'master' branch in the GitHub project, if new work branch is in the LISAv2. Otherwise, you can folk the LISAv2 repo to your own GitHub account.
             ii. Branch out for work and pull down to your local system.
             iii. Once change is ready to review, create a PR from LISAv2 in your account to LIS account. Or, new working branch to master in LISAv2 repo.
-            iv. Add ‘LisaSupport@microsoft.com’ to ‘Reviewers’.
-            v. Once it is approved, then you can merge the PR to master branch.
-            vi. In this case, you will need to rebuild menu by ‘<Partner name>-Refresh-Test-Selection-Menus’
+            iv. Add ‘LisaSupport@microsoft.com’ to ‘Reviewers’, or send email to 'lisasupport@microsoft.com'.
+            v. Once it is approved, you can merge the PR to master branch. In this case, you will need to rebuild menu by ‘<Partner name>-Refresh-Test-Selection-Menus’.
 
 ## Verify a published image on Azure
 
@@ -32,9 +31,9 @@
         1. Sign in to Jenkins page with the assigned user name & password
         2. Browse to '<Partner name>-Refresh-Test-Selection-Menu', if you would like to apply new menu or test cases before test execution.
         3. Click 'Build with Parameters' in left panel menu
-            a. Enter git repo ULR and branch name for menu xml file. Recommend keeping the default Repo URL and branch name.
+            a. Enter the git repo ULR and branch name of new menu xml file. Recommend keeping the default Repo URL and branch name.
             b. Click 'Build' button.
-            c. Click the rotation icon of running job and verify 'SUCCESS' inside 'Console Output'. You have new menu/test cases in Jenkins.
+            c. Click the rotation icon of running job in 'Build History' and verify "SUCCESS" inside 'Console Output'. You have new menu/test cases in Jenkins.
         4. Browse to '<Partner name>-Launch-Tests' and submit the job for test execution.
         5. Click 'Build with Parameters' in left panel menu
             a. Select 'ImageSource' or navigate to 'CustomVHD'. If you have external source URL, you can enter it in 'CustomVHDURL' text box.
@@ -43,7 +42,7 @@
                 i. Supported platform: Azure, etc.
                 ii. Available Category: BVT, Community, Functional, Performance, Smoke.
                 iii. Available Tags: boot, bvt, disk, ext4, gpu, hv_netvsc, etc.
-        6. Enter the email address for report notification.
+        6. Enter partner's email address for report notification.
 
 `API/cmdline Instruction`
 
@@ -69,13 +68,13 @@
 
 ## XML files in XML/TestCases folder
 
-    This location has the list of XML files for test cases. Each XML file names after category for each maintenance / sharing. 
+    This location has the list of XML files for test cases. Each XML file names after category for each maintenance / sharing.
         1. BVT.xml: BVT (Build Validation Test) test cases
         2. CommunityTests.xml: Tests from Open Source Community.
         3. FunctionalTests.xml: Feature tests for SR-IOV, GPU, DPDK, etc.
         4. Other.xml: If any does not fall into existing Category, add to here.
         5. PerformanceTests.xml: Performance test cases
-        6. RegressionTests.xml: Add any tests for regression cycle. 
+        6. RegressionTests.xml: Add any tests for regression cycle.
         7. SmokeTests.xml: It will run before BVT test runs.
         8. StressTests.xml: Under development. Network traffic and stroage IO testing under heavy CPU and Memory stress.
 
