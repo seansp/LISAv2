@@ -4,7 +4,7 @@ Automation platform for Linux images testing on Microsoft Azure and Hyper-V
 
 ## Overview
 
-LISAv2 (Linux Integrated Service Automation) is the One-stop automation solution for Linux images/kernel testing on Microsoft Azure and Hyper-V. LISA-v2 supports both Microsoft Azure and Hyper-V automation, and they use PowerShell, BASH and python scripts. Tests for feature, performance, stress and regression about new Linux Operating Systems and kernels. The test suite provides Build Verification Tests (BVTs), Azure VNET Tests and Network tests.
+LISAv2 (Linux Integrated Service Automation) is the One-stop automation solution for Linux images/kernel testing on Microsoft Azure and Hyper-V. LISA-v2 supports both Microsoft Azure and Hyper-V automation, and they use PowerShell, BASH and python scripts. It includes feature, performance, stress and regression tests about new Linux Operating Systems and Kernels. The test suite provides Build Verification Tests (BVTs), Azure VNET Tests and Network tests also.
 
 ### Prerequisite
 
@@ -88,7 +88,7 @@ Please follow the steps mentioned at [here](https://docs.microsoft.com/en-us/azu
 
 `Applicable if you are using already uploaded VHD / Platform Image to run automation.`
 
-To run automation code successfully, you need have following packages installed in your Linux VHD.
+To run automation code successfully, below are the required packages in your Linux VHD.
 
         1. iperf
         2. mysql-server
@@ -113,9 +113,9 @@ To run automation code successfully, you need have following packages installed 
 
 `PublicKey.cer � PrivateKey.ppk`
 
-A Linux Virtual machine login can be done with Password authentication or SSH key pair authentication. You must create a Public Key and Private key to run automation successfully. To learn more about how to create SSH key pair, please visit [here](http://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-use-ssh-key/).
+A Linux Virtual Machine login can be done with Password authentication or SSH key pair authentication. You must create a Public Key and Private key to run automation successfully. To learn more about how to create SSH key pair, please visit [here](http://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-use-ssh-key/).
 
-After creating Public Key (.cer) and putty compatible private key (.ppk), you must put it in your `automation_root_folder\ssh\` folder and mention their names in Azure XML file.
+After creating Public Key (.cer) and putty compatible private key (.ppk), you must put it in your `<automation_root_folder>\ssh\` folder and update Azure XML file with the Key file name.
 
 ### VNET Preparation
 
@@ -127,7 +127,7 @@ A virtual network should be created and connected to Customer Network before run
 
 #### Create A customer site using RRAS
 
-Apart from Virtual Network in Azure, you also need a network (composed of Subnets and DNS server) to work as Customer Network. If you don�t have separate network to run VNET, you can create a virtual customer network using RRAS. To learn more, please visit [here](https://social.msdn.microsoft.com/Forums/en-US/b7d15a76-37b3-4307-98e3-d9efef5767b8/azure-site-to-site-vpn-routing?forum=WAVirtualMachinesVirtualNetwork).
+Apart from Virtual Network in Azure, you also need a network connection (composed of Subnets and DNS server) as Customer Network. If you do not have separate network to run VNET, you can create a virtual customer network using RRAS (Routing and Remote Access Service). To learn more, please visit [here](https://social.msdn.microsoft.com/Forums/en-US/b7d15a76-37b3-4307-98e3-d9efef5767b8/azure-site-to-site-vpn-routing?forum=WAVirtualMachinesVirtualNetwork).
 
 ### How to Start Automation
 

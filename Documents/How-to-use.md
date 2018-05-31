@@ -5,46 +5,20 @@
 ## Objective
 
     This document instructs for partners to create customized menu of Jenkins pipeline and run either/both Microsoft-provided tests or/and customized test cases in Jenkins. This instruction has 2 major parts; creating menu from xml files and executing tests.
-
-## Prepare a VHD for tests.
-
-    1. Start PowerShell with the Run As Administrator option.
-    2. In powershell, Goto Automation Folder.
-    3. Run following command.
-        .\AzureAutomationManager.ps1 -xmlConfigFile .\Azure_ICA_all.xml -cycleName autosetup -Distro YourDistroName -runtests
-
-        This command will install "Minimum Required Packages" and will capture the VHD which can be used to run further tests like, Network tests & VNET tests.
-
-        List of minimum packages in VHD
-            iperf
-            mysql
-            gcc
-            bind
-            bind-utils
-            bind9
-            python
-            python-argparse
-            python-crypto
-            python-paramiko
-            libstdc++6
-            psmisc
-            nfs-utils
-            nfs-common
-            tcpdump
-
-    4.Once you get the prepared VHD Name, create a new element "Distro" in XML file and give prepared VHD name in Distro element.
+    Creating menu may be optional in your test development. If you keep the same menu structure and add new tests into existing menu, you will only update existing XML files in ./XML/TestCases/
+    If you add new test menu, you will need to re-build Jenkins menu, and then can run new tests.
 
 ## Develop tests in GitHub
 
 `Source: https://github.com/LIS/LISAv2`
 
-    1. XML folder: it has pre-defined global configuration and account information. It also has Region information in xml files. This folder also has two sub folders; TestCases and VMConfigurations. VMConfigurations has the list of xml files for each test case. TestCases folder has the list of xml files for each test category. The master branch is owned by Microsoft, and actively manage the PR in LISAv2. New test case development and/or new menu development must be approved by Microsoft.
-    2. TestScripts folder has the number of test scripts defined in TestCases, and separated by OS type.
-    3. Tools folder has binary files required for test execution.
-    4. This repo will provide Microsoft-provided test cases as well as Partner-developed test cases.
-        a. Microsoft will share the test development plan and its log with partners. If this is the case, you can skip the next paragraph to ‘Verify a published image on Azure’.
-        b. Partners’ developed test cases should be followed below steps.
-            i. Sync up the local master branch from remote master branch in the GitHub project, if new work branch is in the LISAv2. Otherwise, you can folk the LISAv2 repo to your own GitHub account.
+    1. ./XML folder: it has pre-defined global configuration and account information as well as Region information. This folder also has two sub folders; 'TestCases' and 'VMConfigurations'. 'VMConfigurations' has the list of xml files for each test case, which require the list of VM configuration information. 'TestCases' folder has the list of xml files for each test category. The master branch is owned by Microsoft, and actively manage changes in LISAv2. New test case development and/or new menu development must be approved by Microsoft.
+    2. 'Testscripts' folder has the number of test scripts used in TestCases, and separated by OS type.
+    3. 'Tools' folder has binary files required for test execution.
+    4. This repo will provide Microsoft-provided test cases as well as capability of Partner-developed test cases.
+        a. Microsoft will share the test development plan and its log with partners. If you run Microsoft-provided tests, you can skip the next paragraph to ‘Verify a published image on Azure’.
+        b. Partner-developed test cases should be followed below steps.
+            i. Sync up the local 'master' branch from remote 'master' branch in the GitHub project, if new work branch is in the LISAv2. Otherwise, you can folk the LISAv2 repo to your own GitHub account.
             ii. Branch out for work and pull down to your local system.
             iii. Once change is ready to review, create a PR from LISAv2 in your account to LIS account. Or, new working branch to master in LISAv2 repo.
             iv. Add ‘LisaSupport@microsoft.com’ to ‘Reviewers’.
