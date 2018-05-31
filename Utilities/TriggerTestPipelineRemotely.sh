@@ -21,18 +21,6 @@ ImageSource=""
 CustomVHD="" 
 CustomVHDURL=""
 
-if [ - $ImageSource ];
-    echo "Missing required parameter - ImageSource"
-fi
-
-if [ - $CustomVHD ];
-    echo "Missing required parameter - CustomVHD"
-fi
-
-if [ - $CustomVHDURL ];
-    echo "Missing required parameter - CustomVHDURL"
-fi
-
 #Required
 Kernel="default"
 
