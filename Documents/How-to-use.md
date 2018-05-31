@@ -1,9 +1,8 @@
 # Partner Jenkins Pipeline Operation Instruction
-#         1         2         3         4         5         6         7         8
-#12345678901234567890123456789012345678901234567890123456789012345678901234567890
+
 ## Objective
 
-This document provides instructions for partners to create their own customized menu for the Jenkins pipeline and to run Microsoft-provided tests and/or customized test cases in Jenkins. This instruction has 2 major parts; creating the menu from xml files and executing the tests. Creating a custom menu may be optional for your test development. If you keep the same menu structure and add new tests into existing the menu, you will only update the existing XML files in ./XML/TestCases/
+This document provides instructions for partners to create their own customized menu for the Jenkins pipeline and to run Microsoft-provided tests and/or customized test cases in Jenkins. This instruction has 2 major parts; creating the menu from xml files and executing the tests. Creating a custom menu may be optional for your test development. If you keep the same menu structure and add new tests into existing the menu, you will only update the existing XML files in **./XML/TestCases/**
 
 If you add a custom test menu, you will need to re-build the Jenkins menu, and then can run new tests.
 
@@ -59,12 +58,14 @@ If you add a custom test menu, you will need to re-build the Jenkins menu, and t
 
 `API/cmdline Instruction`
 
-A single script executes the test launch/execute with pre-defined parameters. It also offers a parameter file mode, which all parameters are set before execution. The test script loads all paramenters from the file. The parameter file is located at ./Utilities/TestParameters.sh
+A single script executes the test launch/execute with pre-defined parameters. It also offers a parameter file mode, which all parameters are set before execution. The test script loads all paramenters from the file. The parameter file is located at **./Utilities/TestParameters.sh**
+
     $./LaunchTestPipelineRemotely.sh -JenkinsUser "<Azure user account for ApiToken>" -ApiToken "<your access token>" -FtpUsername "<FTP user account>" -FtpPassword "<FTP user account password>" [-ImageSource "<Publisher Offer Sku Version>" | -CustomVHD "<path of vhd file>" | -CustomVHDURL "<URL of custom vhd file>"] -Kernel "[default|custom|linuxnext]" [-CustomKernelFile "<ONLY IF you set Kernel=custom>" | -CustomKernelURL "<ONLY IF you set Kernel=custom>"] -GitUrlForAutomation "https://github.com/LIS/LISAv2.git" -GitBranchForAutomation "master" [-TestByTestname "" | -TestByCategorisedTestname "" | -TestByCategory "" | -TestByTag ""] -Email "<Partner email for test result report>" -TestPipeline "<Partner pipeline name>" -LinuxUsername "<Linux guest OS user name>" -LinuxPassword "<Linux guest OS user password>" [-WaitForResult "yes"]
 
     $./LaunchTestPipelineRemotely.sh -ParametersFile "<parameter definition file>"
 
-`‘Script name and its parameters’ example`
+`‘Script name and its parameters’`
+example
 
     $./LaunchTestPipelineRemotely.sh -JenkinsUser "microsoft" -ApiToken "123451234512345dlkwekl2kfo" -FtpUsername "ftpuser" -FtpPassword "ftppassword! [-ImageSource "linux-next_1.2" | -CustomVHD "/path/to/local/vhd/vhdx/vhd.xz" | -CustomVHDURL "http://downloadable/link/to/your/file.vhd/vhdx/vhd.xz"] -Kernel "default" -GitUrlForAutomation "https://github.com/LIS/LISAv2.git" -GitBranchForAutomation "master" -TestByTestname "Azure>>VERIFY-DEPLOYMENT-PROVISION>>eastasia,Azure>>VERIFY-HOSTNAME>>westeurope" -TestByCategorisedTestname "Azure>>Smoke>>default>>VERIFY-DEPLOYMENT-PROVISION>>northeurope,Azure>>Functional>>SRIOV>>VERIFY-SRIOV-LSPCI>>southcentralus" -TestByCategory "Azure>>Functional>>SRIOV>>eastus,Azure>>Community>>LTP>>westeurope" -TestByTag "Azure>>boot>>northcentralus,Azure>>wala>>westeurope,Azure>>gpu>>eastus" -Email "lisasupport@microsoft.com" -TestPipeline "Microsoft-Test-Execution-Pipeline" -LinuxUsername "linuxuser" -LinuxPassword "linuxpassword?"
 
@@ -72,27 +73,27 @@ A single script executes the test launch/execute with pre-defined parameters. It
 
 ## GlobalConfigurations.xml in XML folder
 
-    Pre-defined global configuration. We do not recommend making changes to this file.
+Pre-defined global configuration. We do not recommend making changes to this file.
 
 ## RegionAndStorageAccounts.xml in XML folder
 
-    It has pre-defined region information. We do not recommend making changes to this file.
+It has pre-defined region information. We do not recommend making changes to this file.
 
 ## TestToRegionMapping.xml in XML folder
 
-    This XML file defines the regions per Category. It may require specific region only for available setup/resource. By default, 'global' has all regions.
+This XML file defines the regions per Category. It may require specific region only for available setup/resource. By default, 'global' has all regions.
 
 ## XML files in XML/TestCases folder
 
-    This location has the list of XML files for test cases. Each XML file names after category for each maintenance / sharing.
-        1. BVT.xml: BVT (Build Validation Test) test cases
-        2. CommunityTests.xml: Tests from Open Source Community.
-        3. FunctionalTests.xml: Feature tests for SR-IOV, GPU, DPDK, etc.
-        4. Other.xml: If any does not fall into existing Category, add to here.
-        5. PerformanceTests.xml: Performance test cases
-        6. RegressionTests.xml: Add any tests for regression cycle.
-        7. SmokeTests.xml: It will run before BVT test runs.
-        8. StressTests.xml: Under development. Network traffic and stroage IO testing under heavy CPU and Memory stress.
+This location has the list of XML files for test cases. Each XML file names after category for each maintenance / sharing.
+    1. BVT.xml: BVT (Build Validation Test) test cases
+    2. CommunityTests.xml: Tests from Open Source Community.
+    3. FunctionalTests.xml: Feature tests for SR-IOV, GPU, DPDK, etc.
+    4. Other.xml: If any does not fall into existing Category, add to here.
+    5. PerformanceTests.xml: Performance test cases
+    6. RegressionTests.xml: Add any tests for regression cycle.
+    7. SmokeTests.xml: It will run before BVT test runs.
+    8. StressTests.xml: Under development. Network traffic and stroage IO testing under heavy CPU and Memory stress.
 
     Here is the format inside of TestCases.xml file. TODO: Revise the definition, and required field or not.
     [Req] Required
@@ -109,7 +110,7 @@ A single script executes the test launch/execute with pre-defined parameters. It
 
 ## TestsConfigurations.xml in XML/VMConfigurations
 
-    Per Category, each XML file has VM name, Resource Group name, etc. Do not recommend to make change of the file.
+Per Category, each XML file has VM name, Resource Group name, etc. We do not recommend to make change of the file.
 
 ## Support Contact
 
