@@ -28,20 +28,18 @@ LISAv2 (Linux Integrated Service Automation) is the One-stop automation solution
 
 ### Download Latest Azure PowerShell
 
-1. Download Web Platform Installer from [here](http://go.microsoft.com/fwlink/p/?linkid=320376&clcid=0x409)
-2. Start Web Platform Installer and select Azure PowerShell and proceed for Azure PowerShell Installation.
+1. Download Web Platform Installer from [here](http://go.microsoft.com/fwlink/p/?linkid=320376&clcid=0x409) 
+2. Start Web Platform Installer and select Azure PowerShell (Recommend 6.0.0 or above) and proceed for Azure PowerShell Installation.
 
 ### Authenticate Your Machine with Your Azure Subscription
 
-There are two ways to authenticate your machine with your subscription.
-
 1. Azure AD method
 
-      This creates a 12 Hours temporary session in PowerShell, in that session, you are allowed to run Windows Azure Cmdlets to control / use your subscription. After 12 hours you will be asked to enter username and password of your subscription. This may create problems long running automations, hence we use certificate method.
+        This creates a 12 Hours temporary session in PowerShell, in that session, you are allowed to run Windows Azure Cmdlets to control / use your subscription. After 12 hours you will be asked to enter username and password of your subscription. This may create problems long running automations, hence we use service principal method.
 
-2. Certificate Method.
+2. Service Principal method
 
-      To learn more about how to configure your PowerShell with your subscription, please visit [here](http://azure.microsoft.com/en-us/documentation/articles/powershell-install-configure/#Connect).
+        Refer to this URL [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal)
 
 ### Update GlobalConfigurations.xml file
 
@@ -70,7 +68,7 @@ There are two ways to authenticate your machine with your subscription.
 
 ```
 
-2. Save file.
+2. Save files.
 
 ### Prepare VHD to work in Azure
 
@@ -109,26 +107,6 @@ To run automation code successfully, below are the required packages in your Lin
         17. nfs-common
         18. tcpdump
 
-### Create SSH Key Pair
-
-`PublicKey.cer � PrivateKey.ppk`
-
-A Linux Virtual Machine login can be done with Password authentication or SSH key pair authentication. You must create a Public Key and Private key to run automation successfully. To learn more about how to create SSH key pair, please visit [here](http://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-use-ssh-key/).
-
-After creating Public Key (.cer) and putty compatible private key (.ppk), you must put it in your `<automation_root_folder>\ssh\` folder and update Azure XML file with the Key file name.
-
-### VNET Preparation
-
-`Required for executing Virtual Network Tests`
-
-#### Create a Virtual Network in Azure
-
-A virtual network should be created and connected to Customer Network before running VNET test cases. To learn about how to create a virtual network on Azure, please visit [here](https://docs.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-howto-site-to-site-resource-manager-portal).
-
-#### Create A customer site using RRAS
-
-Apart from Virtual Network in Azure, you also need a network connection (composed of Subnets and DNS server) as Customer Network. If you do not have separate network to run VNET, you can create a virtual customer network using RRAS (Routing and Remote Access Service). To learn more, please visit [here](https://social.msdn.microsoft.com/Forums/en-US/b7d15a76-37b3-4307-98e3-d9efef5767b8/azure-site-to-site-vpn-routing?forum=WAVirtualMachinesVirtualNetwork).
-
 ### How to Start Automation
 
 Before starting Automation, make sure that you have completed steps in chapter [Prepare Your Machine for Automation Cycle](#prepare)
@@ -151,7 +129,7 @@ Before starting Automation, make sure that you have completed steps in chapter [
 
 #### Command to Start any of the Automation Cycle
 
-        .\AzureAutomationManager.ps1 -xmlConfigFile .\Azure_ICA_ALL.xml -runtests -email �Distro <DistroName> -cycleName <TestCycleToExecute> -UseAzureResourceManager
+        .\RunTests.ps1 -TestPlatform "Azure" -TestLocation "<Region location>" -RGIdentifier "<Identifier of the resource group>" [-ARMImageName "<publisher offer SKU version>" | -OsVHD "<VHD from storage account>" ] [[-TestCategory "<Test Catogry from Jenkins pipeline>" | -TestArea "<Test Area from Jenkins pipeline>"]* | -TestTag "<A Tag from Jenkins pipeline>" | -TestNames "<Test cases separated by comma>"]
 
 #### More Information
 

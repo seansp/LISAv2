@@ -46,13 +46,15 @@
 
 `API/cmdline Instruction`
 
-    A single script executes the test launch/execute with pre-defined parameters.
-        TODO: TBD
-`‘Script name and its parameters’`
-    $TriggerTestPipelineRemotely 'parameters'
-    Example,
-        TODO: TBD
-`‘Script name’ ‘parameters’`
+    A single script executes the test launch/execute with pre-defined parameters. It also offers a parameter file mode, which all parameters are set before execution. The test script loads all paramenters from the file. The parameter file is located at ./Utilities/TestParameters.sh
+    $./LaunchTestPipelineRemotely.sh -JenkinsUser "<Azure user account for ApiToken>" -ApiToken "<your access token>" -FtpUsername "<FTP user account>" -FtpPassword "<FTP user account password>" [-ImageSource "<Publisher Offer Sku Version>" | -CustomVHD "<path of vhd file>" | -CustomVHDURL "<URL of custom vhd file>"] -Kernel "[default|custom|linuxnext]" [-CustomKernelFile "<ONLY IF you set Kernel=custom>" | -CustomKernelURL "<ONLY IF you set Kernel=custom>"] -GitUrlForAutomation "https://github.com/LIS/LISAv2.git" -GitBranchForAutomation "master" [-TestByTestname "" | -TestByCategorisedTestname "" | -TestByCategory "" | -TestByTag ""] -Email "<Partner email for test result report>" -TestPipeline "<Partner pipeline name>" -LinuxUsername "<Linux guest OS user name>" -LinuxPassword "<Linux guest OS user password>" [-WaitForResult "yes"]
+
+    $./LaunchTestPipelineRemotely.sh -ParametersFile "<parameter definition file>"
+
+`‘Script name and its parameters’ example`
+    $./LaunchTestPipelineRemotely.sh -JenkinsUser "microsoft" -ApiToken "123451234512345dlkwekl2kfo" -FtpUsername "ftpuser" -FtpPassword "ftppassword! [-ImageSource "linux-next_1.2" | -CustomVHD "/path/to/local/vhd/vhdx/vhd.xz" | -CustomVHDURL "http://downloadable/link/to/your/file.vhd/vhdx/vhd.xz"] -Kernel "default" -GitUrlForAutomation "https://github.com/LIS/LISAv2.git" -GitBranchForAutomation "master" -TestByTestname "Azure>>VERIFY-DEPLOYMENT-PROVISION>>eastasia,Azure>>VERIFY-HOSTNAME>>westeurope" -TestByCategorisedTestname "Azure>>Smoke>>default>>VERIFY-DEPLOYMENT-PROVISION>>northeurope,Azure>>Functional>>SRIOV>>VERIFY-SRIOV-LSPCI>>southcentralus" -TestByCategory "Azure>>Functional>>SRIOV>>eastus,Azure>>Community>>LTP>>westeurope" -TestByTag "Azure>>boot>>northcentralus,Azure>>wala>>westeurope,Azure>>gpu>>eastus" -Email "lisasupport@microsoft.com" -TestPipeline "Microsoft-Test-Execution-Pipeline" -LinuxUsername "linuxuser" -LinuxPassword "linuxpassword?"
+
+    $./LaunchTestPipelineRemotely.sh -ParametersFile "TestParameters.sh"
 
 ## GlobalConfigurations.xml in XML folder
 
@@ -79,18 +81,17 @@
         8. StressTests.xml: Under development. Network traffic and stroage IO testing under heavy CPU and Memory stress.
 
     Here is the format inside of TestCases.xml file. TODO: Revise the definition, and required field or not.
-        <testName></testName>: Represent unique Test Case name
-        <testScript></testScript>
-        <PowershellScript></PowershellScript>: Actual PS script file name.
-        <files></files>
-        <setupType></setupType>: The name represents VM's size and its definition in TestsConfigurations.xml file, VMConfigurations folder.
-        <TestType></TestType>
-        <TestFeature></TestFeature>
-        <Platform></Platform>: Supported platform names. Azure, HyperV, etc.
-        <Category></Category>: Available Test Category
-        <Area></Area>: Test Area
-        <Tags></Tags>: Tag information seperated by comma
-        <TestID></TestID>: Unique Test ID used in Jenkins.
+    [Req] Required
+    [Opt] Optional
+        <testName></testName>: Represent unique Test Case name [Req]
+        <testScript></testScript>: test script file name [Opt]
+        <PowershellScript></PowershellScript>: Actual launch PS script file name. [Req]
+        <files></files>: If test requires data files, add the file names here [Opt]
+        <setupType></setupType>: The name represents VM definition in <Category name>TestsConfigurations xml file, VMConfigurations folder. [Req]
+        <Platform></Platform>: Supported platform names. Azure, HyperV, etc. [Req]
+        <Category></Category>: Available Test Category [Req]
+        <Area></Area>: Test Area [Req]
+        <Tags></Tags>: Tag information seperated by comma [Opt]
 
 ## TestsConfigurations.xml in XML/VMConfigurations
 
