@@ -14,23 +14,23 @@ If you add a custom test menu, you will need to re-build the Jenkins menu, and t
         This folder also has two sub folders; 'TestCases' and 'VMConfigurations'. 'VMConfigurations' has the 
         list of xml files for each test case, which require the list of VM configuration information. 
         'TestCases' folder has the list of xml files for each test category. The master branch is owned by 
-        Microsoft, and actively manage changes in LISAv2. New test case development and/or new menu 
+        Microsoft, and actively manages changes in LISAv2. New test case development and/or new menu 
         development must be approved by Microsoft.
     2. 'Testscripts' folder has the number of test scripts used in TestCases, and separated by OS type.
     3. 'Tools' folder has binary files required for test execution.
     4. This repo will provide Microsoft-provided test cases as well as capability of Partner-developed test cases.
         a. Microsoft will share the test development plan and its log with partners. If you only execute 
-            Microsoft-provided tests, you can skip the next paragraph to ‘Verify a published image on Azure’.
+            Microsoft-provided tests, you can skip to the next section ‘Verify a published image on Azure’.
         b. Partner-developed test cases should follow these steps:
             i.   Sync up the local 'master' branch from remote 'master' branch in the GitHub project, 
                  if new work branch is in the LISAv2. Otherwise, you can folk the LISAv2 repo to your own GitHub 
                  account.
             ii.  Branch out for work and pull down to your local system.
-            iii. Once change is ready to review, create a Pull Request from LISAv2 in your account to LIS account. 
+            iii. Once a change is ready to review, create a Pull Request from LISAv2 in your account to LIS account. 
                  Or, new working branch to master in LISAv2 repo.
             iv.  Add ‘LisaSupport@microsoft.com’ to ‘Reviewers’, or send email to 'lisasupport@microsoft.com'.
             v.   Once it is approved, you can merge the Pull Request to master branch. In this case, you will need 
-                 to rebuild menu by ‘<Partner name>-Refresh-Test-Selection-Menus’.
+                 to rebuild the menu by ‘<Partner name>-Refresh-Test-Selection-Menus’.
 
 ## Verify a published image on Azure
 
@@ -49,13 +49,13 @@ If you add a custom test menu, you will need to re-build the Jenkins menu, and t
         5. Click 'Build with Parameters' in left panel menu
             a. Select 'ImageSource' or navigate to 'CustomVHD'. If you have external source URL, you can enter it in 
                'CustomVHDURL' text box.
-            b. Leave 'Kernel' unless you would like to change to customized kernel code or linux-next.
+            b. Leave 'Kernel' unchanged unless you would like to use customized kernel code or linux-next.
             c. Update the 3 options regarding how to select test cases; TestName, Category and Tag.
                 i. Supported platform: Azure, etc.
                 ii. Available Category: BVT, Community, Functional, Performance, and Smoke.
                 iii. Available Tags: boot, bvt, disk, ext4, gpu, hv_netvsc, etc.
         6. Enter partner's email address for report notification.
-        
+
 
 `API/cmdline Instruction`
 
