@@ -27,15 +27,15 @@ nested                         15
 core                           24
 ...
 ```
-## Get-TaggedVMs.ps1
+## Get-VMs.ps1
 ```Powershell
-PS /> ./Utilities/Get-TaggedVMs.ps1 -OnlyTests -customSecretsFilePath "c:\mysecretfile.xml"
+PS /> ./Utilities/Get-VMs.ps1 -OnlyTests -customSecretsFilePath "c:\mysecretfile.xml"
 VMName    TestName         BuildURL                                         ResourceGroup          VMRegion   VMAge BuildUser                      VMSize
 ------    --------         --------                                         -------------          --------   ----- ---------                      ------
 client-vm VERIFY-DEP       https://someurl.com/job/id/console               MYRESOURCEGROUP        westeurope     1 User Account                   Standard_DS15_v2
 ...
 
-PS /> ./Utilities/Get-TaggedVMs.ps1 -NoSecrets                   
+PS /> ./Utilities/Get-VMs.ps1 -NoSecrets                   
 VMName    TestName         BuildURL                                         ResourceGroup          VMRegion   VMAge BuildUser                      VMSize
 ------    --------         --------                                         -------------          --------   ----- ---------                      ------
 vm001                                                                       MYRESOURCeGROUP        westeurope    23 User Account                   Standard_DS15_v3
