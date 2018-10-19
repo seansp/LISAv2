@@ -27,7 +27,7 @@ nested                         15
 core                           24
 ...
 ```
-## Get-VMs.ps1
+## Get-AzureVMs.ps1
 ```Powershell
 PS /lisav2> ./Utilities/Get-AzureVMs.ps1 -NoSecrets -Tags "User" -IncludeAge
 10/19/2018 16:33:10 : [INFO ] Collecting VM age from disk details for 2 machines.
