@@ -40,8 +40,8 @@ southcentralus ICA-RG-SingleVM-PERSISTANT  ICA-RG-SINGLEVM             Standard_
 
 PS /lisav2> ./Utilities/Get-VMs.ps1 -NoSecrets -filterScriptBlock {$_.VMRegion -eq 'eastus'}             
 
-VMRegion VMName                                                    ResourceGroupName                                       VMSize             BuildURL BuildUser TestName CreationDate RGAge
--------- ------                                                    -----------------                                       ------             -------- --------- -------- ------------ -----
+VMRegion VMName                      ResourceGroupName                                      VMSize           BuildURL BuildUser TestName CreationDate RGAge
+-------- ------                      -----------------                                      ------           -------- --------- -------- ------------ -----
 eastus   user--b104-jenkins-1        USER-B104-JENKINS-ONEVM                                Standard_DS2_v2  ...      User      Run        10.10.2018    22            
 eastus   user-eastus-bsd104-jenkins  USER-EASTUS-BSD104-JENKINS-DEPLOY1VM                   Standard_DS2_v2  ...      User                                  
 eastus   user--b122-jenkins-1        USER-B122-JENKINS-ONEVM                                Standard_DS2_v3  ...      User      Run        10.10.2018    22            
