@@ -4,11 +4,12 @@
 # Description: This script lists the VMs in the current subscription and lists our Tags and VMAges.
 param 
 ( 
-    [switch] $OnlyTests,
     [switch] $NoSecrets,
     [switch] $IncludeAge,
     $AzureSecretsFile,
-    [ScriptBlock] $filterScriptBlock
+    [string] $Region,
+    [string] $VmSize,
+    [string] $Tags
 )
 
 #Load libraries
@@ -44,15 +45,18 @@ if( $NoSecrets -eq $false )
 }
 function Get-VMAgeFromDisk()
 {
-	param
-	(
-      [Parameter(Mandatory=$true)] $vm
+    param
+    (
+        [Parameter(Mandatory=$true)] $vm
     )
     $storageKind = "none"
     $ageDays = -1
     if( $vm.StorageProfile.OsDisk.Vhd.Uri )
     {
         $vhd = $vm.StorageProfile.OsDisk.Vhd.Uri
+        # The URI needs to be broken apart to find the storage account, the container, and the file.
+        #       $storageAccount                                 $container  $blob
+        #http://standardlrssomenumberhere.blob.core.windows.net/vhds        /nameOfDrive.vhd
         $storageAccount = $vhd.Split("/")[2].Split(".")[0]
         $container = $vhd.Split("/")[3]
         $blob = $vhd.Split("/")[4]
@@ -90,21 +94,81 @@ $allRGs = Get-AzureRmResourceGroup
 
 $results = @()
 
-$vmIndex = 0
+
+$usingRegion = $false
+$usingVmSize = $false
+$usingTags = $false
 
 foreach ($vm in $allVMs) 
 {
     $include = $false
-    if( $OnlyTests -eq $true ) 
+    $hasFailed = $false
+
+    #Check to see if the Region is being used.
+    if( $Region -ne "" )
     {
-        if( $vm.Tags.TestName ) 
-        { 
-            $include = $true 
+        $usingRegion = $true
+        if( $vm.Location -like $Region )
+        {
+            $include = $true
         }
-    } 
-    else 
+        else {
+            $include = $false
+            $hasFailed = $true
+        }
+    }
+    #Check to see if the VmSize is being used.
+    if( $VmSize -ne "" -and $hasFailed -eq $false )
     {
-        $include = $true
+        $usingVmSize = $true
+        if( $vm.HardwareProfile.VmSize -like $VmSize )
+        {
+            $include = $true
+        }
+        else {
+            $include = $false
+            $hasFailed = $true
+        }
+    }
+    #Check to see if the comma seperated values in Tags are like any tags on the ResourceGroup.
+    if( $Tags -ne "" -and $hasFailed -eq $false )
+    {
+        $include = $false
+        $usingTags = $true
+        $eachTag = $Tags -Split ","
+        $rg = $allRGs | Where ResourceGroupName -eq $vm.ResourceGroupName
+        foreach( $tag in $eachTag )
+        {
+            if( $rg.Tags.BuildUrl -like $tag )
+            {
+                $include = $true
+            }
+            if( $rg.Tags.BuildUser -like $tag )
+            {
+                $include = $true
+            }
+            if( $rg.Tags.BuildMachine -like $tag )
+            {
+                $include = $true
+            }
+            if( $rg.Tags.TestName -like $tag )
+            {
+                $include = $true
+            }
+        }
+        if( $include -eq $false )
+        {
+            $hasFailed = $true
+        }
+    }
+
+    if( $hasFailed -eq $false )
+    {
+        #Check for NO filters.
+        if( $usingRegion -eq $usingVmSize -and $usingVmSize -eq $usingTags -and $usingVmSize -eq $false )
+        {
+            $include = $true
+        }
     }
 
     if( $include -eq $true ) 
@@ -138,12 +202,6 @@ foreach( $result in $results )
         $result | Add-Member RGAge ""
     }
 }
-
-#Apply custom filter.
-if( $filterScriptBlock )
-{
-    $results = $results | Where-Object $filterScriptBlock
-} 
 
 #Perform costly age check
 if( $IncludeAge )

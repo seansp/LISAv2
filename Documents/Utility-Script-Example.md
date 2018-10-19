@@ -1,5 +1,5 @@
 #Example Usages
-## Get-LisaV2ScriptStatistics.ps1
+## Get-LisaV2Statistics.ps1
 PS /Utilities> ./Get-LISAv2Statistics.ps1
 ```Powershell
 TestCase                                                      Platform        Category            Area                                     Tags
@@ -29,7 +29,7 @@ core                           24
 ```
 ## Get-VMs.ps1
 ```Powershell
-PS /lisav2> ./Utilities/Get-VMs.ps1 -NoSecrets -filterScriptBlock {$_.BuildUser -eq 'User'} -IncludeAge
+PS /lisav2> ./Utilities/Get-AzureVMs.ps1 -NoSecrets -Tags "User" -IncludeAge
 10/19/2018 16:33:10 : [INFO ] Collecting VM age from disk details for 2 machines.
 
 VMRegion       VMName                      ResourceGroupName           VMSize          BuildURL BuildUser TestName                    CreationDate RGAge VMAge                           
@@ -38,7 +38,7 @@ eastus         ICA-RG-SingleVM-RS17-SJHG   ICA-RG-SINGLEVM             Standard_
 southcentralus ICA-RG-SingleVM-PERSISTANT  ICA-RG-SINGLEVM             Standard_DS1_v2 NA       User      VERIFY-DEPLOYMENT-PROVISION                       52
 
 
-PS /lisav2> ./Utilities/Get-VMs.ps1 -NoSecrets -filterScriptBlock {$_.VMRegion -eq 'eastus'}             
+PS /lisav2> ./Utilities/Get-AzureVMs.ps1 -NoSecrets -Region Eastus             
 
 VMRegion VMName                      ResourceGroupName                                      VMSize           BuildURL BuildUser TestName CreationDate RGAge
 -------- ------                      -----------------                                      ------           -------- --------- -------- ------------ -----
@@ -48,7 +48,7 @@ eastus   user--b122-jenkins-1        USER-B122-JENKINS-ONEVM                    
 eastus   user-eastus-bsd122-jenkins  USER-EASTUS-BSD122-JENKINS-DEPLOY1VM                   Standard_DS2_v3  ...      User                                  
 
  
-PS /lisav2> ./Utilities/Get-VMs.ps1 -NoSecrets -filterScriptBlock {$_.VMRegion -eq 'eastus' -and $_.VMSize -eq 'Standard_DS2_v2'}
+PS /lisav2> ./Utilities/Get-AzureVMs.ps1 -NoSecrets -Region Eastus -VMSize Standard_DS2_v2
 
 VMRegion VMName                      ResourceGroupName                                       VMSize          BuildURL BuildUser TestName CreationDate RGAge
 -------- ------                      -----------------                                       ------          -------- --------- -------- ------------ -----
@@ -56,13 +56,7 @@ eastus   user--b104-jenkins-1        USER-B104-JENKINS-ONEVM                    
 eastus   user-eastus-bsd104-jenkins  USER-EASTUS-BSD104-JENKINS-DEPLOY1VM                   Standard_DS2_v2  ...      User                                  
 
 
-PS /> ./Utilities/Get-VMs.ps1 -OnlyTests -AzureSecretsFile "c:\mysecretfile.xml" -filterScriptBlock {$_.VMRegion -eq 'eastus' -and $_.VMSize -eq 'Standard_DS2_v2'}
-VMRegion VMName                      ResourceGroupName                                       VMSize          BuildURL BuildUser TestName CreationDate RGAge
--------- ------                      -----------------                                       ------          -------- --------- -------- ------------ -----
-eastus   user--b104-jenkins-1        USER-B104-JENKINS-ONEVM                                Standard_DS2_v2  ...      User      Run        10.10.2018    22            
-...
-
-PS /> ./Utilities/Get-VMs.ps1 -NoSecrets                   
+PS /> ./Utilities/Get-AzureVMs.ps1 -NoSecrets                   
 VMName    TestName         BuildURL                                         ResourceGroup          VMRegion   VMAge BuildUser                      VMSize
 ------    --------         --------                                         -------------          --------   ----- ---------                      ------
 vm001                                                                       MYRESOURCeGROUP        westeurope    23 User Account                   Standard_DS15_v3
