@@ -29,7 +29,7 @@ core                           24
 ```
 ## Get-VMs.ps1
 ```Powershell
-PS /> ./Utilities/Get-VMs.ps1 -OnlyTests -customSecretsFilePath "c:\mysecretfile.xml"
+PS /> ./Utilities/Get-VMs.ps1 -OnlyTests -AzureSecretsFile "c:\mysecretfile.xml"
 VMName    TestName         BuildURL                                         ResourceGroup          VMRegion   VMAge BuildUser                      VMSize
 ------    --------         --------                                         -------------          --------   ----- ---------                      ------
 client-vm VERIFY-DEP       https://someurl.com/job/id/console               MYRESOURCEGROUP        westeurope     1 User Account                   Standard_DS15_v2
@@ -42,6 +42,12 @@ vm001                                                                       MYRE
 client-vm VERIFY-DEP       https://someurl.com/job/id/console               MYRESOURCEGROUP        westeurope     1 User Account                   Standard_DS15_v2
 vm017                                                                       MYOtherRESOURCeGROUP   eastus2      103 User Account                   Standard_DS15_v2
 ...
+
+PS /> ./Utilities/Get-VMs.ps1 -NoSecrets -filterScriptBlock {$_.VMSize -eq 'Standard_DS15_v3'}                   
+VMName    TestName         BuildURL                                         ResourceGroup          VMRegion   VMAge BuildUser                      VMSize
+------    --------         --------                                         -------------          --------   ----- ---------                      ------
+vm001                                                                       MYRESOURCeGROUP        westeurope    23 User Account                   Standard_DS15_v3
+
 ```
 ## Support Contact
 
