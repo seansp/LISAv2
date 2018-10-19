@@ -6,6 +6,7 @@ param
 ( 
     [switch] $OnlyTests,
     [switch] $NoSecrets,
+    [switch] $IncludeAge,
     $AzureSecretsFile,
     [ScriptBlock] $filterScriptBlock
 )
@@ -47,9 +48,8 @@ function Get-VMAgeFromDisk()
 	(
       [Parameter(Mandatory=$true)] $vm
     )
-    $storageKind = "None"
+    $storageKind = "none"
     $ageDays = -1
-
     if( $vm.StorageProfile.OsDisk.Vhd.Uri )
     {
         $vhd = $vm.StorageProfile.OsDisk.Vhd.Uri
@@ -58,7 +58,6 @@ function Get-VMAgeFromDisk()
         $blob = $vhd.Split("/")[4]
     
         $storageKind = "blob"
-    
         $blobStorageUsed = Get-AzureRmStorageAccount | where {  $($_.StorageAccountName -eq $storageAccount) -and $($_.Location -eq $vm.Location) }
         if( $blobStorageUsed )
         {
@@ -87,7 +86,11 @@ function Get-VMAgeFromDisk()
 
 #Get all VMs and enumerate thru them adding items to results list.
 $allVMs = Get-AzureRmVM
+$allRGs = Get-AzureRmResourceGroup
+
 $results = @()
+
+$vmIndex = 0
 
 foreach ($vm in $allVMs) 
 {
@@ -103,25 +106,60 @@ foreach ($vm in $allVMs)
     {
         $include = $true
     }
+
     if( $include -eq $true ) 
     {
-        $results += @{
+        $result = @{
             'VMName' = $vm.Name
             'VMSize' = $vm.HardwareProfile.VmSize
-            'VMAge' = Get-VMAgeFromDisk $vm
             'VMRegion' = $vm.Location
-            'ResourceGroup' = $vm.ResourceGroupName
-            'BuildURL' = $vm.Tags.BuildURL
-            'BuildUser' = $vm.Tags.BuildUser
-            'TestName' = $vm.Tags.TestName
+            'ResourceGroupName' = $vm.ResourceGroupName
+            'vm' = $vmIndex
         }
+        $results += $result
     }
 }
+$results = $results | Foreach-Object { [pscustomobject] $_ }
+#Now add the resource group details.
+foreach( $result in $results )
+{
+    $rg = $allRGs | Where ResourceGroupName -eq $result.ResourceGroupName
+    $result | Add-Member BuildURL $rg.Tags.BuildURL
+    $result | Add-Member BuildUser $rg.Tags.BuildUser
+    $result | Add-Member TestName $rg.Tags.TestName
+    $result | Add-Member CreationDate $rg.Tags.CreationDate
+
+    if( $rg.Tags.CreationDate )
+    { 
+        $days = ([DateTime]::Now - $rg.Tags.CreationDate).Days
+        $result | Add-Member RGAge $days
+    }
+    else {
+        $result | Add-Member RGAge ""
+    }
+}
+
+#Apply custom filter.
 if( $filterScriptBlock )
 {
-    $results |  Foreach-Object { [pscustomobject] $_ } | Where-Object $filterScriptBlock | Format-Table
+    $results = $results | Where-Object $filterScriptBlock
 } 
-else 
+
+#Perform costly age check
+if( $IncludeAge )
 {
-    $results |  Foreach-Object { [pscustomobject] $_ } | Format-Table
+    $ageIndex = 0
+    LogMsg "Collecting VM age from disk details for $($results.Length) machines."
+    foreach( $result in $results )
+    {
+        $result | Add-Member VMAge (Get-VMAgeFromDisk $allVms[$result.vm])
+        $ageIndex = $ageIndex + 1
+    }
 }
+#trim out the vm index.
+foreach( $result in $results )
+{
+    $result.PSObject.Properties.Remove('vm')
+}
+#output the table
+$results | Format-Table 
