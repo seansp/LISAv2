@@ -6,7 +6,8 @@ param
 ( 
     [switch] $OnlyTests,
     [switch] $NoSecrets,
-    $customSecretsFilePath
+    $AzureSecretsFile,
+    [ScriptBlock] $filterScriptBlock
 )
 
 #Load libraries
@@ -15,9 +16,9 @@ Get-ChildItem .\Libraries -Recurse | Where-Object { $_.FullName.EndsWith(".psm1"
 if( $NoSecrets -eq $false )
 {
     #Read secrets file and terminate if not present.
-    if ($customSecretsFilePath)
+    if ($AzureSecretsFile)
     {
-        $secretsFile = $customSecretsFilePath
+        $secretsFile = $AzureSecretsFile
     }
     elseif ($env:Azure_Secrets_File) 
     {
@@ -25,7 +26,7 @@ if( $NoSecrets -eq $false )
     }
     else 
     {
-        LogMsg "-customSecretsFilePath and env:Azure_Secrets_File are empty. Exiting."
+        LogMsg "-AzureSecretsFile and env:Azure_Secrets_File are empty. Exiting."
         exit 1
     }
     if ( Test-Path $secretsFile)
@@ -116,4 +117,11 @@ foreach ($vm in $allVMs)
         }
     }
 }
-$results |  Foreach-Object { [pscustomobject] $_ } | Format-Table
+if( $filterScriptBlock )
+{
+    $results |  Foreach-Object { [pscustomobject] $_ } | Where-Object $filterScriptBlock | Format-Table
+} 
+else 
+{
+    $results |  Foreach-Object { [pscustomobject] $_ } | Format-Table
+}
