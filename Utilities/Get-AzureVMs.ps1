@@ -13,35 +13,32 @@ param
 )
 
 #Load libraries
-Get-ChildItem .\Libraries -Recurse | Where-Object { $_.FullName.EndsWith(".psm1") } | ForEach-Object { Import-Module $_.FullName -Force -Global }
+Get-ChildItem ..\Libraries -Recurse | Where-Object { $_.FullName.EndsWith(".psm1") } | ForEach-Object { Import-Module $_.FullName -Force -Global }
 
-if( $NoSecrets -eq $false )
+#Read secrets file and terminate if not present.
+if ($AzureSecretsFile)
 {
-    #Read secrets file and terminate if not present.
-    if ($AzureSecretsFile)
-    {
-        $secretsFile = $AzureSecretsFile
-    }
-    elseif ($env:Azure_Secrets_File) 
-    {
-        $secretsFile = $env:Azure_Secrets_File
-    }
-    else 
-    {
-        LogMsg "-AzureSecretsFile and env:Azure_Secrets_File are empty. Exiting."
-        exit 1
-    }
-    if ( Test-Path $secretsFile)
-    {
-        LogMsg "Secrets file found."
-        .\Utilities\AddAzureRmAccountFromSecretsFile.ps1 -customSecretsFilePath $secretsFile
-        $xmlSecrets = [xml](Get-Content $secretsFile)
-    }
-    else
-    {
-        LogMsg "Secrets file not found. Exiting."
-        exit 1
-    }
+    $secretsFile = $AzureSecretsFile
+}
+elseif ($env:Azure_Secrets_File) 
+{
+    $secretsFile = $env:Azure_Secrets_File
+}
+else 
+{
+    LogMsg "-AzureSecretsFile and env:Azure_Secrets_File are empty. Exiting."
+    exit 1
+}
+if ( Test-Path $secretsFile)
+{
+    LogMsg "Secrets file found."
+    .\AddAzureRmAccountFromSecretsFile.ps1 -customSecretsFilePath $secretsFile
+    $xmlSecrets = [xml](Get-Content $secretsFile)
+}
+else
+{
+    LogMsg "Secrets file not found. Exiting."
+    exit 1
 }
 function Get-VMAgeFromDisk()
 {

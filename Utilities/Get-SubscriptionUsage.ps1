@@ -1,38 +1,19 @@
-##############################################################################################
-# GetSibscriptionUsgae.ps1
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the Apache License.
-# Operations :
-#
-<#
-.SYNOPSIS
-	<Description>
+# Linux on Hyper-V and Azure Test Code, ver. 1.0.0
+# Copyright (c) Microsoft Corporation
 
-.PARAMETER
-	<Parameters>
-
-.INPUTS
-	
-
-.NOTES
-    Creation Date:  
-    Purpose/Change: 
-
-.EXAMPLE
-
-
-#>
-###############################################################################################
+# Description: This script creates an HTML report of our subscription usage details at .\SubscriptionUsage.html and .\ShowSubscriptionUsageEmailSubject.txt
 
 param 
 ( 
     [switch] $UploadToDB,
-    $customSecretsFilePath=""
+    $AzureSecretsFile=""
 )
 
-Get-ChildItem .\Libraries -Recurse | Where-Object { $_.FullName.EndsWith(".psm1") } | ForEach-Object { Import-Module $_.FullName -Force -Global }
+#Load libraries
+Get-ChildItem ..\Libraries -Recurse | Where-Object { $_.FullName.EndsWith(".psm1") } | ForEach-Object { Import-Module $_.FullName -Force -Global }
 
-if ($customSecretsFilePath)
+#Read secrets file and terminate if not present.
+if ($AzureSecretsFile)
 {
     $secretsFile = $customSecretsFilePath
 }
@@ -42,18 +23,18 @@ elseif ($env:Azure_Secrets_File)
 }
 else 
 {
-    LogMsg "-customSecretsFilePath and env:Azure_Secrets_File are empty. Exiting."
+    LogMsg "-AzureSecretsFile and env:Azure_Secrets_File are empty. Exiting."
     exit 1
 }
 if ( Test-Path $secretsFile)
 {
-	LogMsg "AzureSecrets.xml found."
-	.\Utilities\AddAzureRmAccountFromSecretsFile.ps1 -customSecretsFilePath $secretsFile
+    LogMsg "Secrets file found."
+	.\AddAzureRmAccountFromSecretsFile.ps1 -customSecretsFilePath $secretsFile
 	$xmlSecrets = [xml](Get-Content $secretsFile)
 }
 else
 {
-	LogMsg "$secretsFile not found. Exiting."
+    LogMsg "Secrets file not found. Exiting."
 	exit 1
 }
 
@@ -323,7 +304,7 @@ if ($UploadToDB)
 #endregion
 
 LogMsg "Getting top 20 VMs."
-.\JenkinsPipelines\Scripts\SubscriptionUsageTopVMs.ps1 -TopVMsCount 20
+.\Get-SubscriptionUsageTopVMs.ps1 -TopVMsCount 20
 
 $TopVMsHTMLReport = (Get-Content -Path .\vmAge.html)
 
