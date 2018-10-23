@@ -38,7 +38,8 @@ eastus         ICA-RG-SingleVM-RS17-SJHG   ICA-RG-SINGLEVM             Standard_
 southcentralus ICA-RG-SingleVM-PERSISTANT  ICA-RG-SINGLEVM             Standard_DS1_v2 NA       User      VERIFY-DEPLOYMENT-PROVISION                       52
 
 
-PS /Utilities> ./Get-AzureVMs.ps1 -Region Eastus             
+#In this case, we load the Secrets file from $env:Azure_Secrets_File
+PS /Utilities> ./Get-AzureVMs.ps1 -Region Eastus -UseSecretsFile
 
 VMRegion VMName                      ResourceGroupName                                      VMSize           BuildURL BuildUser TestName CreationDate RGAge
 -------- ------                      -----------------                                      ------           -------- --------- -------- ------------ -----
@@ -64,7 +65,7 @@ client-vm VERIFY-DEP       https://someurl.com/job/id/console               MYRE
 vm017                                                                       MYOtherRESOURCeGROUP   eastus2      103 User Account                   Standard_DS15_v2
 ...
 
-PS /> ./Utilities/Get-VMs.ps1 -filterScriptBlock {$_.VMSize -eq 'Standard_DS15_v3'}                   
+PS /> ./Utilities/Get-VMs.ps1 -filterScriptBlock {$_.VMSize -eq 'Standard_DS15_v3'}
 VMName    TestName         BuildURL                                         ResourceGroup          VMRegion   VMAge BuildUser                      VMSize
 ------    --------         --------                                         -------------          --------   ----- ---------                      ------
 vm001                                                                       MYRESOURCeGROUP        westeurope    23 User Account                   Standard_DS15_v3
