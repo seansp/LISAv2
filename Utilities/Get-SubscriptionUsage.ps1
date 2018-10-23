@@ -6,7 +6,7 @@
 param 
 ( 
     [switch] $UploadToDB,
-    $AzureSecretsFile=""
+    $AzureSecretsFile
 )
 
 #Load libraries
@@ -15,7 +15,7 @@ Get-ChildItem ..\Libraries -Recurse | Where-Object { $_.FullName.EndsWith(".psm1
 #Read secrets file and terminate if not present.
 if ($AzureSecretsFile)
 {
-    $secretsFile = $customSecretsFilePath
+    $secretsFile = $AzureSecretsFile
 }
 elseif ($env:Azure_Secrets_File) 
 {
