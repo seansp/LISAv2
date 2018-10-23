@@ -4,7 +4,6 @@
 # Description: This script lists the VMs in the current subscription and lists our Tags and VMAges.
 param 
 ( 
-    [switch] $NoSecrets,
     [switch] $IncludeAge,
     $AzureSecretsFile,
     [string] $Region,
