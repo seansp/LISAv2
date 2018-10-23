@@ -42,9 +42,6 @@ if( $UseSecretsFile -or $AzureSecretsFile )
         exit 1
     }
 }
-else {
-    LogMsg "Using existing credentials."
-}
 
 try 
 {
