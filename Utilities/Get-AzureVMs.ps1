@@ -9,11 +9,12 @@ param
     $AzureSecretsFile,
     [string] $Region,
     [string] $VmSize,
-    [string] $Tags
+    [string] $Tags,
+    [string[]] $ColumnsToDisplay
 )
 
 #Load libraries
-Get-ChildItem ..\Libraries -Recurse | Where-Object { $_.FullName.EndsWith(".psm1") } | ForEach-Object { Import-Module $_.FullName -Force -Global -DisableNameChecking }
+Get-ChildItem ..\Libraries -Recurse | Where-Object { $_.FullName.EndsWith(".psm1") } | ForEach-Object { Import-Module $_.FullName -Force -Global }
 
 #When given -UseSecretsFile or an AzureSecretsFile path, we will attempt to search the path or the environment variable.
 if( $UseSecretsFile -or $AzureSecretsFile )
@@ -184,6 +185,7 @@ foreach ($vm in $allVMs)
         }
         $results += $result
     }
+    $vmIndex = $vmIndex + 1
 }
 $results = $results | Foreach-Object { [pscustomobject] $_ }
 #Now add the resource group details.
@@ -193,7 +195,7 @@ foreach( $result in $results )
     $result | Add-Member BuildURL $rg.Tags.BuildURL
     $result | Add-Member BuildUser $rg.Tags.BuildUser
     $result | Add-Member TestName $rg.Tags.TestName
-    $result | Add-Member CreationDate $rg.Tags.CreationDate
+    $result | Add-Member CreationTime $rg.Tags.CreationTime
 
     if( $rg.Tags.CreationDate )
     { 
@@ -221,5 +223,12 @@ foreach( $result in $results )
 {
     $result.PSObject.Properties.Remove('vm')
 }
-#output the table
-$results | Format-Table 
+if( $ColumnsToDisplay )
+{
+    $results | Format-Table -Property $ColumnsToDisplay
+}
+else
+{
+    #output the table
+    $results | Format-Table 
+}
