@@ -228,8 +228,8 @@ if( $IncludeAge )
         {
             $result.PsObject.Properties.Remove( 'Age' )
             $result | Add-Member Age $(Get-VMAgeFromDisk $result.vm)
-            $result.PsObject.Properties.Remove( 'vm' )
         }
+        $result.PsObject.Properties.Remove( 'vm' )
     }
 }
 #output the table
